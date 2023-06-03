@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "cucumber",
+  "version": "${version}",
+
+  "name": "Cucumber: Refabricated",
+  "description": "",
+  "authors": [
+    "AlexSa1000"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/cucumber-refabricated",
+    "sources": "https://github.com/AlexSa1000/Cucumber-Refabricated",
+    "issues": "https://github.com/AlexSa1000/Cucumber-Refabricated/issues"
+  },
+
+  "license": "MIT License",
+  "icon": "assets/cucumber/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.alex.cucumber.Cucumber"
+    ]
+  },
+  "mixins": [
+    "cucumber.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "fabric-api": "*",
+    "minecraft": "1.19.2",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

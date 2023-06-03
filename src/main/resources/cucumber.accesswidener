@@ -1,0 +1,13 @@
+accessWidener v1 named
+
+accessible method net/minecraft/client/renderer/RenderType create (Ljava/lang/String;Lcom/mojang/blaze3d/vertex/VertexFormat;Lcom/mojang/blaze3d/vertex/VertexFormat$Mode;IZZLnet/minecraft/client/renderer/RenderType$CompositeState;)Lnet/minecraft/client/renderer/RenderType$CompositeRenderType;
+accessible method net/minecraft/world/item/crafting/ShapedRecipe keyFromJson (Lcom/google/gson/JsonObject;)Ljava/util/Map;
+accessible method net/minecraft/world/item/crafting/ShapedRecipe patternFromJson (Lcom/google/gson/JsonArray;)[Ljava/lang/String;
+accessible method net/minecraft/world/item/crafting/ShapedRecipe dissolvePattern ([Ljava/lang/String;Ljava/util/Map;II)Lnet/minecraft/core/NonNullList;
+accessible method net/minecraft/world/item/crafting/ShapedRecipe shrink ([Ljava/lang/String;)[Ljava/lang/String;
+accessible method net/minecraft/world/level/block/Block popExperience (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;I)V
+accessible method net/minecraft/world/item/crafting/RecipeManager byType (Lnet/minecraft/world/item/crafting/RecipeType;)Ljava/util/Map;
+accessible method net/minecraft/tags/ItemTags bind (Ljava/lang/String;)Lnet/minecraft/tags/TagKey;
+
+accessible field net/minecraft/world/item/crafting/RecipeManager recipes Ljava/util/Map;
+accessible field net/minecraft/world/item/crafting/RecipeManager byName Ljava/util/Map;
