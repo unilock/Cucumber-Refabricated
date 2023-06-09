@@ -15,6 +15,11 @@ repositories {
 		url = 'https://maven.blamejared.com'
 		name = 'BlameJared Maven'
 	}
+
+	maven {
+		name = "Fuzs Mod Resources"
+		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+	}
 }
 
 dependencies {
@@ -32,6 +37,8 @@ dependencies {
 	include modApi("teamreborn:energy:${project.energy_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
+
+	modApi "net.minecraftforge:forgeconfigapiport-fabric:4.2.11"
 
 	modImplementation "com.electronwill.night-config:core:${project.nightconfig_version}"
 	include "com.electronwill.night-config:core:${project.nightconfig_version}"

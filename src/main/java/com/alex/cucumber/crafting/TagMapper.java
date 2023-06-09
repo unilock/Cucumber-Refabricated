@@ -3,6 +3,7 @@ package com.alex.cucumber.crafting;
 import com.alex.cucumber.Cucumber;
 import com.alex.cucumber.compat.almostunified.AlmostUnifiedAdapter;
 import com.alex.cucumber.config.ModConfigs;
+import com.alex.cucumber.forge.event.TagsUpdatedEvent;
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,12 +31,19 @@ public class TagMapper {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     private static final Map<String, String> TAG_TO_ITEM_MAP = new HashMap<>();
 
+    public static void onTagsUpdated(TagsUpdatedEvent event) {
+        if (event.shouldUpdateStaticData())
+            reloadTagMappings();
+    }
+
     public static void reloadTagMappings() {
         var stopwatch = Stopwatch.createStarted();
         var dir = FabricLoader.getInstance().getConfigDir().toFile();
 
+        TAG_TO_ITEM_MAP.clear();
+
         if (dir.exists() && dir.isDirectory()) {
-            var file = FabricLoader.getInstance().getConfigDir().resolve("mysticalagriculture-tags.json").toFile();
+            var file = FabricLoader.getInstance().getConfigDir().resolve("cucumber-tags.json").toFile();
 
             if (file.exists() && file.isFile()) {
                 JsonObject json;
@@ -57,7 +65,7 @@ public class TagMapper {
 
                         // if auto refresh tag entries is enabled, we check any entries that contain an item ID to see
                         // if they are still present. if not we just refresh the entry
-                        if (/*ModConfigs.AUTO_REFRESH_TAG_ENTRIES.get()*/true) {
+                        if (ModConfigs.AUTO_REFRESH_TAG_ENTRIES.get()) {
                             if (!itemId.isEmpty() && !"null".equalsIgnoreCase(itemId)) {
                                 var item = Registry.ITEM.get(new ResourceLocation(itemId));
                                 if (item == null || item == Items.AIR) {
@@ -73,7 +81,7 @@ public class TagMapper {
 
                     reader.close();
                 } catch (Exception e) {
-                    Cucumber.LOGGER.error("An error occurred while reading mysticalagriculture-tags.json", e);
+                    Cucumber.LOGGER.error("An error occurred while reading cucumber-tags.json", e);
                 } finally {
                     IOUtils.closeQuietly(reader);
                 }
@@ -83,20 +91,21 @@ public class TagMapper {
         }
 
         stopwatch.stop();
-        Cucumber.LOGGER.info("Loaded mysticalagriculture-tags.json in {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
+
+        Cucumber.LOGGER.info("Loaded cucumber-tags.json in {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
     }
 
     public static Item getItemForTag(String tagId) {
         var preferredItem = AlmostUnifiedAdapter.getPreferredItemForTag(tagId);
         if (preferredItem != null) {
             return preferredItem;
+        }
 
-        } else if (TAG_TO_ITEM_MAP.containsKey(tagId)) {
+        if (TAG_TO_ITEM_MAP.containsKey(tagId)) {
             var id = TAG_TO_ITEM_MAP.get(tagId);
             return Registry.ITEM.get(new ResourceLocation(id));
         } else {
-            //File file = FMLPaths.CONFIGDIR.get().resolve("cucumber-tags.json").toFile();
-            var file = FabricLoader.getInstance().getConfigDir().resolve("mysticalagriculture-tags.json").toFile();
+            var file = FabricLoader.getInstance().getConfigDir().resolve("cucumber-tags.json").toFile();
             if (!file.exists()) {
                 generateNewConfig(file);
             }
@@ -110,7 +119,7 @@ public class TagMapper {
                     reader = new FileReader(file);
                     json = parser.parse(reader).getAsJsonObject();
                 } catch (Exception e) {
-                    Cucumber.LOGGER.error("An error occurred while reading mysticalagriculture-tags.json", e);
+                    Cucumber.LOGGER.error("An error occurred while reading cucumber-tags.json", e);
                 } finally {
                     IOUtils.closeQuietly(reader);
                 }
@@ -118,7 +127,7 @@ public class TagMapper {
                 if (json != null) {
                     if (json.has(tagId)) {
                         var itemId = json.get(tagId).getAsString();
-                        if (!itemId.isEmpty() && !"null".equalsIgnoreCase(itemId))
+                        if (itemId.isEmpty() || "null".equalsIgnoreCase(itemId))
                             return addTagToFile(tagId, json, file);
 
                         TAG_TO_ITEM_MAP.put(tagId, itemId);
@@ -174,7 +183,7 @@ public class TagMapper {
         try (var writer = new FileWriter(file)) {
             GSON.toJson(json, writer);
         } catch (IOException e) {
-            Cucumber.LOGGER.error("An error occurred while writing to mysticalagriculture-tags.json", e);
+            Cucumber.LOGGER.error("An error occurred while writing to cucumber-tags.json", e);
         }
     }
 
@@ -185,7 +194,7 @@ public class TagMapper {
 
             GSON.toJson(object, writer);
         } catch (IOException e) {
-            Cucumber.LOGGER.error("An error occurred while creating mysticalagriculture-tags.json", e);
+            Cucumber.LOGGER.error("An error occurred while creating cucumber-tags.json", e);
         }
     }
 }

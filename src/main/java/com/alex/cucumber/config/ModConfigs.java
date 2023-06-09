@@ -1,20 +1,20 @@
 package com.alex.cucumber.config;
 
-import com.alex.cucumber.forge.common.ConfigSpec;
 import com.google.common.collect.Lists;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
 
 public class ModConfigs {
-    public static final ConfigSpec CLIENT;
-    public static final ConfigSpec COMMON;
+    public static final ForgeConfigSpec CLIENT;
+    public static final ForgeConfigSpec COMMON;
 
-    public static final ConfigSpec.BooleanValue ENABLE_TAG_TOOLTIPS;
-    public static final ConfigSpec.BooleanValue ENABLE_NBT_TOOLTIPS;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_TAG_TOOLTIPS;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_NBT_TOOLTIPS;
 
     // Client
     static {
-        final var client = new ConfigSpec.Builder();
+        final var client = new ForgeConfigSpec.Builder();
 
         client.comment("General configuration options.").push("General");
         ENABLE_TAG_TOOLTIPS = client
@@ -28,12 +28,12 @@ public class ModConfigs {
         CLIENT = client.build();
     }
 
-    public static final ConfigSpec.ConfigValue<List<String>> MOD_TAG_PRIORITIES;
-    public static final ConfigSpec.BooleanValue AUTO_REFRESH_TAG_ENTRIES;
+    public static final ForgeConfigSpec.ConfigValue<List<String>> MOD_TAG_PRIORITIES;
+    public static final ForgeConfigSpec.BooleanValue AUTO_REFRESH_TAG_ENTRIES;
 
     // Common
     static {
-        final var common = new ConfigSpec.Builder();
+        final var common = new ForgeConfigSpec.Builder();
 
         common.comment("General configuration options.").push("General");
         MOD_TAG_PRIORITIES = common

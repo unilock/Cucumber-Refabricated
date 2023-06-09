@@ -4,9 +4,11 @@
   "package": "com.alex.cucumber.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "CropBlockInvoker"
+    "CropBlockInvoker",
+    "ReloadableServerResources"
   ],
   "client": [
+    "ClientPacketListener"
   ],
   "injectors": {
     "defaultRequire": 1

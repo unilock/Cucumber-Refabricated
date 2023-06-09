@@ -21,6 +21,8 @@
   "entrypoints": {
     "main": [
       "com.alex.cucumber.Cucumber"
+    ],
+    "client": [
     ]
   },
   "mixins": [
