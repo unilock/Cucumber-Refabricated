@@ -1,10 +1,7 @@
-# Fabric Example Mod
+# Cucumber Library: Refabricated 
 
-## Setup
-
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+This is a Fabric port of [Cucumber Library](https://www.curseforge.com/minecraft/mc-mods/cucumber) (by [BlakeBr0](https://www.curseforge.com/members/blakebr0)), a library of shared code and functionality used by my mods.
 
 ## License
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
-# Cucumber-Refabricated
+[MIT License](./LICENSE)
