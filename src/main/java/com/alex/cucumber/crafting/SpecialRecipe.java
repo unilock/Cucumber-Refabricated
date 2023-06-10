@@ -1,6 +1,6 @@
 package com.alex.cucumber.crafting;
 
-import com.alex.cucumber.util.RecipeMatcher;
+import com.alex.cucumber.forge.common.util.RecipeMatcher;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;

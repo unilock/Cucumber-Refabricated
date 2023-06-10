@@ -1,4 +1,4 @@
-package com.alex.cucumber.util;
+package com.alex.cucumber.forge.common.util;
 
 import java.util.BitSet;
 import java.util.LinkedList;
