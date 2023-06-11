@@ -12,7 +12,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import java.text.NumberFormat;
 
-public class BaseContainerScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
+public abstract class BaseContainerScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
     protected ResourceLocation bgTexture;
     protected int bgImgWidth;
     protected int bgImgHeight;
@@ -37,8 +37,7 @@ public class BaseContainerScreen<T extends AbstractContainerMenu> extends Abstra
         this.renderTooltip(matrix, mouseX, mouseY);
     }
 
-    @Override
-    protected void renderBg(PoseStack poseStack, float f, int i, int j) {
+    protected void renderDefaultBg(PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, this.bgTexture);
@@ -46,7 +45,7 @@ public class BaseContainerScreen<T extends AbstractContainerMenu> extends Abstra
         int x = this.leftPos;
         int y = this.topPos;
 
-        blit(poseStack, x, y, 0, 0, this.imageWidth, this.imageHeight, this.bgImgWidth, this.bgImgHeight);
+        blit(matrix, x, y, 0, 0, this.imageWidth, this.imageHeight, this.bgImgWidth, this.bgImgHeight);
     }
 
     protected static String text(String key, Object... args) {
