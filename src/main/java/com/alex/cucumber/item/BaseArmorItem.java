@@ -11,17 +11,11 @@ import net.minecraft.world.item.ItemStack;
 import java.util.function.Function;
 
 public class BaseArmorItem extends ArmorItem {
-    public BaseArmorItem(ArmorMaterial material, EquipmentSlot slot, Function<Properties, Properties> properties) {
-        super(material, slot, properties.apply(new Properties()));
+    public BaseArmorItem(ArmorMaterial material, Type type) {
+        super(material, type, new Properties());
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof Enableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
+    public BaseArmorItem(ArmorMaterial material, Type type, Function<Properties, Properties> properties) {
+        super(material, type, properties.apply(new Properties()));
     }
 }

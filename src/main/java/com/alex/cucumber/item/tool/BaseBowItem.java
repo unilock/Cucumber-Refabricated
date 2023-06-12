@@ -22,15 +22,6 @@ public class BaseBowItem extends BowItem implements CustomBow {
         super(properties.apply(new Properties()));
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof Enableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
-    }
     @Override // copied from BowItem with the initial declaration of 'j' changed
     public void releaseUsing(ItemStack itemStack, Level level, LivingEntity livingEntity, int i) {
         if (livingEntity instanceof Player player) {

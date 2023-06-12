@@ -26,16 +26,6 @@ public class BaseShearsItem extends ShearsItem implements ForgeItem {
     }
 
     @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof Enableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
-    }
-
-    @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
         var level = player.level;
         if (level.isClientSide())

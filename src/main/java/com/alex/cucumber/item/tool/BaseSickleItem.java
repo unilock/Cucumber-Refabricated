@@ -23,21 +23,15 @@ public class BaseSickleItem extends DiggerItem implements ForgeItem {
     private final float attackSpeed;
     private final int range;
 
-    public BaseSickleItem(Tier tier, float attackDamage, float attackSpeed, int range, Function<Properties, Properties> properties) {
-        super(attackDamage, attackSpeed, tier, ModTags.MINEABLE_WITH_SICKLE, properties.apply(new Properties()));
-        this.attackDamage = attackDamage;
-        this.attackSpeed = attackSpeed;
-        this.range = range;
+    public BaseSickleItem(Tier tier, int range) {
+        this(tier, range, p -> p);
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof Enableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
+    public BaseSickleItem(Tier tier, int range, Function<Properties, Properties> properties) {
+        super(4.0F, -3.0F, tier, ModTags.MINEABLE_WITH_SICKLE, properties.apply(new Properties()));
+        this.attackDamage = 4.0F;
+        this.attackSpeed = -3.0F;
+        this.range = range;
     }
 
     @Override

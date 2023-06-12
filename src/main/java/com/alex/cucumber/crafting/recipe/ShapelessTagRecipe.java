@@ -6,10 +6,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
@@ -18,18 +20,18 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
     private final OutputResolver outputResolver;
     private ItemStack output;
 
-    public ShapelessTagRecipe(ResourceLocation id, String group, NonNullList<Ingredient> inputs, OutputResolver.Item outputResolver) {
-        super(id, group, ItemStack.EMPTY, inputs);
+    public ShapelessTagRecipe(ResourceLocation id, String group, CraftingBookCategory category, NonNullList<Ingredient> inputs, OutputResolver.Item outputResolver) {
+        super(id, group, category, ItemStack.EMPTY, inputs);
         this.outputResolver = outputResolver;
     }
 
-    public ShapelessTagRecipe(ResourceLocation id, String group, NonNullList<Ingredient> inputs, String tag, int count) {
-        super(id, group, ItemStack.EMPTY, inputs);
+    public ShapelessTagRecipe(ResourceLocation id, String group, CraftingBookCategory category, NonNullList<Ingredient> inputs, String tag, int count) {
+        super(id, group, category, ItemStack.EMPTY, inputs);
         this.outputResolver = new OutputResolver.Tag(tag, count);
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess access) {
         if (this.output == null) {
             this.output = this.outputResolver.resolve();
         }
@@ -55,6 +57,7 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
         @Override
         public ShapelessTagRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             var group = GsonHelper.getAsString(json, "group", "");
+            var category = CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(json, "category", null), CraftingBookCategory.MISC);
             var ingredients = readIngredients(GsonHelper.getAsJsonArray(json, "ingredients"));
 
             if (ingredients.isEmpty()) {
@@ -67,13 +70,14 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
             var tag = GsonHelper.getAsString(result, "tag");
             var count = GsonHelper.getAsInt(result, "count", 1);
 
-            return new ShapelessTagRecipe(recipeId, group, ingredients, tag, count);
+            return new ShapelessTagRecipe(recipeId, group, category, ingredients, tag, count);
         }
 
         @Override
         public ShapelessTagRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             var group = buffer.readUtf(32767);
             var size = buffer.readVarInt();
+            var category = buffer.readEnum(CraftingBookCategory.class);
             var ingredients = NonNullList.withSize(size, Ingredient.EMPTY);
 
             for (var j = 0; j < ingredients.size(); j++) {
@@ -82,13 +86,14 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
 
             var output = OutputResolver.create(buffer);
 
-            return new ShapelessTagRecipe(recipeId, group, ingredients, output);
+            return new ShapelessTagRecipe(recipeId, group, category, ingredients, output);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, ShapelessTagRecipe recipe) {
             buffer.writeUtf(recipe.getGroup());
             buffer.writeVarInt(recipe.getIngredients().size());
+            buffer.writeEnum(recipe.category());
 
             for (var ingredient : recipe.getIngredients()) {
                 ingredient.toNetwork(buffer);

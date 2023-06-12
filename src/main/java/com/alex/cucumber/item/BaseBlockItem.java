@@ -9,26 +9,12 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.function.Function;
 
-public class BaseBlockItem extends BlockItem implements Enableable {
+public class BaseBlockItem extends BlockItem {
+    public BaseBlockItem(Block block) {
+        super(block, new Properties());
+    }
+
     public BaseBlockItem(Block block, Function<Properties, Properties> properties) {
         super(block, properties.apply(new Properties()));
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this.getBlock() instanceof Enableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
-    }
-
-    @Override
-    public boolean isEnabled() {
-        if (this.getBlock() instanceof Enableable enableable)
-            return enableable.isEnabled();
-
-        return true;
     }
 }

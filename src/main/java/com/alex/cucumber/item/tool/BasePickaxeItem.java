@@ -13,6 +13,10 @@ public class BasePickaxeItem extends PickaxeItem {
     private final float attackDamage;
     private final float attackSpeed;
 
+    public BasePickaxeItem(Tier tier) {
+        this(tier, 1, -2.8F, p -> p);
+    }
+
     public BasePickaxeItem(Tier tier, Function<Properties, Properties> properties) {
         this(tier, 1, -2.8F, properties);
     }
@@ -21,16 +25,6 @@ public class BasePickaxeItem extends PickaxeItem {
         super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof Enableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
     }
 
     public float getAttackDamage() {

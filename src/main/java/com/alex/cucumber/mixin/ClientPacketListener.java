@@ -14,14 +14,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static com.alex.cucumber.crafting.TagMapper.onTagsUpdated;
 
 @Mixin(net.minecraft.client.multiplayer.ClientPacketListener.class)
-public class ClientPacketListener {
-    @Shadow private RegistryAccess.Frozen registryAccess;
+public abstract class ClientPacketListener {
 
     @Shadow @Final private Connection connection;
 
+    @Shadow public abstract RegistryAccess registryAccess();
+
     @Inject(method = "handleUpdateTags", at = @At(value = "TAIL"))
     private void injectMethod(ClientboundUpdateTagsPacket clientboundUpdateTagsPacket, CallbackInfo ci) {
-        var event = new TagsUpdatedEvent(this.registryAccess, true, connection.isMemoryConnection());
+        var event = new TagsUpdatedEvent(this.registryAccess(), true, connection.isMemoryConnection());
         onTagsUpdated(event);
     }
 }

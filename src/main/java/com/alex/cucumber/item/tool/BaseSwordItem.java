@@ -13,6 +13,10 @@ public class BaseSwordItem extends SwordItem {
     private final float attackDamage;
     private final float attackSpeed;
 
+    public BaseSwordItem(Tier tier) {
+        this(tier, 3, -2.4F, p -> p);
+    }
+
     public BaseSwordItem(Tier tier, Function<Properties, Properties> properties) {
         this(tier, 3, -2.4F, properties);
     }
@@ -21,16 +25,6 @@ public class BaseSwordItem extends SwordItem {
         super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof Enableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
     }
 
     @Override

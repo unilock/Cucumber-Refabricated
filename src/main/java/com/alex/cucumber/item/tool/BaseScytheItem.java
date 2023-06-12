@@ -5,11 +5,13 @@ import com.alex.cucumber.iface.Enableable;
 import com.alex.cucumber.mixin.CropBlockInvoker;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,21 +27,15 @@ public class BaseScytheItem extends SwordItem implements ForgeItem {
     private final float attackSpeed;
     private final int range;
 
-    public BaseScytheItem(Tier tier, int attackDamage, float attackSpeed, int range, Function<Properties, Properties> properties) {
-        super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
-        this.attackDamage = attackDamage;
-        this.attackSpeed = attackSpeed;
-        this.range = range;
+    public BaseScytheItem(Tier tier, int range) {
+        this(tier, range, p -> p);
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof Enableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
+    public BaseScytheItem(Tier tier, int range, Function<Properties, Properties> properties) {
+        super(tier, 4, -2.8F, properties.apply(new Properties()));
+        this.attackDamage = 4F;
+        this.attackSpeed = -2.8F;
+        this.range = range;
     }
 
     @Override
@@ -113,15 +109,18 @@ public class BaseScytheItem extends SwordItem implements ForgeItem {
             var level = player.level;
             var range = (this.range >= 2 ? 1.0D + (this.range - 1) * 0.25D : 1.0D);
             var entities = level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(range, 0.25D, range));
+            var damageType = player.level.registryAccess().lookup(Registries.DAMAGE_TYPE).map(r -> r.get(DamageTypes.PLAYER_ATTACK));
 
             for (var aoeEntity : entities) {
                 if (aoeEntity != player && aoeEntity != entity && !player.isAlliedTo(entity)) {
-                    var source = DamageSource.playerAttack(player);
-                    var attackDamage = this.getAttackDamage() * 0.67F;
-                    //var success = ForgeHooks.onLivingAttack(aoeEntity, source, attackDamage);
+                    if (damageType.isPresent() && damageType.get().isPresent()) {
+                        var source = new DamageSource(damageType.get().get(), player);
+                        var attackDamage = this.getAttackDamage() * 0.67F;
+                        //var success = ForgeHooks.onLivingAttack(aoeEntity, source, attackDamage);
 
-                    aoeEntity.knockback(0.4F, Mth.sin(player.getYRot() * 0.017453292F), -Mth.cos(player.getYRot() * 0.017453292F));
-                    aoeEntity.hurt(source, attackDamage);
+                        aoeEntity.knockback(0.4F, Mth.sin(player.getYRot() * 0.017453292F), -Mth.cos(player.getYRot() * 0.017453292F));
+                        aoeEntity.hurt(source, attackDamage);
+                    }
                 }
             }
 

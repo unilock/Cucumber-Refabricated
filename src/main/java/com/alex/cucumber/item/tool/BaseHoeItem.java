@@ -23,16 +23,6 @@ public class BaseHoeItem extends HoeItem {
         this.attackSpeed = attackSpeed;
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof Enableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
-    }
-
     public float getAttackDamage() {
         return this.attackDamage + this.getTier().getAttackDamageBonus();
     }

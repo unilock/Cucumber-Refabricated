@@ -22,16 +22,6 @@ public class BaseCrossbowItem extends CrossbowItem implements CustomBow {
         super(properties.apply(new Properties()));
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof Enableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
-    }
-
     @Override // copied from CrossbowItem with the initial declaration of 'i' changed
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         int i = (int) ((this.getUseDuration(stack) - timeLeft) * this.getDrawSpeedMulti(stack));

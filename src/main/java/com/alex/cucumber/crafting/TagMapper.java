@@ -10,7 +10,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -67,7 +68,7 @@ public class TagMapper {
                         // if they are still present. if not we just refresh the entry
                         if (ModConfigs.AUTO_REFRESH_TAG_ENTRIES.get()) {
                             if (!itemId.isEmpty() && !"null".equalsIgnoreCase(itemId)) {
-                                var item = Registry.ITEM.get(new ResourceLocation(itemId));
+                                var item = BuiltInRegistries.ITEM.get(new ResourceLocation(itemId));
                                 if (item == null || item == Items.AIR) {
                                     addTagToFile(tagId, json, file, false);
                                 }
@@ -103,7 +104,7 @@ public class TagMapper {
 
         if (TAG_TO_ITEM_MAP.containsKey(tagId)) {
             var id = TAG_TO_ITEM_MAP.get(tagId);
-            return Registry.ITEM.get(new ResourceLocation(id));
+            return BuiltInRegistries.ITEM.get(new ResourceLocation(id));
         } else {
             var file = FabricLoader.getInstance().getConfigDir().resolve("cucumber-tags.json").toFile();
             if (!file.exists()) {
@@ -132,7 +133,7 @@ public class TagMapper {
 
                         TAG_TO_ITEM_MAP.put(tagId, itemId);
 
-                        return Registry.ITEM.get(new ResourceLocation(itemId));
+                        return BuiltInRegistries.ITEM.get(new ResourceLocation(itemId));
                     }
 
                     return addTagToFile(tagId, json, file);
@@ -155,7 +156,7 @@ public class TagMapper {
     private static Item addTagToFile(String tagId, JsonObject json, File file, boolean save) {
         var mods = ModConfigs.MOD_TAG_PRIORITIES.get();
         var key = ItemTags.bind(tagId);
-        var tags = Registry.ITEM.holders().filter(entry -> entry.is(key));
+        var tags = BuiltInRegistries.ITEM.holders().filter(entry -> entry.is(key));
 
         var item = tags.min((item1, item2) -> {
             var id1 = item1.unwrapKey().orElse(null);
@@ -167,7 +168,7 @@ public class TagMapper {
             return index1 > index2 ? 1 : index1 == -1 ? 0 : -1;
         }).orElse(Items.AIR.builtInRegistryHolder());
 
-        var itemId = item.value().equals(Items.AIR) ? "null" : item.unwrapKey().orElse(ResourceKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("air"))).location().toString();
+        var itemId = item.value().equals(Items.AIR) ? "null" : item.unwrapKey().orElse(ResourceKey.create(Registries.ITEM, new ResourceLocation("air"))).location().toString();
 
         json.addProperty(tagId, itemId);
         TAG_TO_ITEM_MAP.put(tagId, itemId);

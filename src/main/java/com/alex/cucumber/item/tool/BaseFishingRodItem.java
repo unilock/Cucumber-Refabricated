@@ -15,16 +15,6 @@ public class BaseFishingRodItem extends FishingRodItem {
         super(properties.apply(new Properties()));
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof Enableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
-    }
-
     public static ClampedItemPropertyFunction getCastPropertyGetter() {
         return (stack, level, entity, _unused) -> {
             if (entity == null)

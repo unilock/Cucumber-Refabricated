@@ -13,6 +13,10 @@ public class BaseShovelItem extends ShovelItem {
     private final float attackDamage;
     private final float attackSpeed;
 
+    public BaseShovelItem(Tier tier) {
+        this(tier, 1.5F, -3.0F, p -> p);
+    }
+
     public BaseShovelItem(Tier tier, Function<Properties, Properties> properties) {
         this(tier, 1.5F, -3.0F, properties);
     }
@@ -21,16 +25,6 @@ public class BaseShovelItem extends ShovelItem {
         super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof Enableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
     }
 
     public float getAttackDamage() {

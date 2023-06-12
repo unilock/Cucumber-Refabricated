@@ -37,11 +37,11 @@ public class SlotItemHandler extends Slot {
         this.setChanged();
     }
 
-    @Override
+    /*@Override
     public void initialize(ItemStack stack) {
         this.getItemHandler().setStackInSlot(index, stack);
         this.setChanged();
-    }
+    }*/
 
     @Override
     public void onQuickCraft(ItemStack newItem, ItemStack original) {

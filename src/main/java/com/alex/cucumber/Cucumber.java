@@ -2,8 +2,8 @@ package com.alex.cucumber;
 
 import com.alex.cucumber.config.ModConfigs;
 import com.alex.cucumber.init.ModRecipeSerializers;
+import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
 import net.fabricmc.api.ModInitializer;
-import net.minecraftforge.api.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +15,9 @@ public class Cucumber implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ModRecipeSerializers.registerRecipeSerializers();
+		ModRecipeSerializers.registerModRecipeSerializers();
 
-		ModLoadingContext.registerConfig(MOD_ID, ModConfig.Type.CLIENT, ModConfigs.CLIENT);
-		ModLoadingContext.registerConfig(MOD_ID, ModConfig.Type.COMMON, ModConfigs.COMMON);
+		ForgeConfigRegistry.INSTANCE.register(MOD_ID, ModConfig.Type.CLIENT, ModConfigs.CLIENT);
+		ForgeConfigRegistry.INSTANCE.register(MOD_ID, ModConfig.Type.COMMON, ModConfigs.COMMON);
 	}
 }
