@@ -1,6 +1,5 @@
 package com.alex.cucumber.item.tool;
 
-import com.alex.cucumber.forge.common.extensions.ForgeItem;
 import com.alex.cucumber.iface.Enableable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -20,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Random;
 import java.util.function.Function;
 
-public class BaseShearsItem extends ShearsItem implements ForgeItem {
+public class BaseShearsItem extends ShearsItem {
     public BaseShearsItem(Function<Properties, Properties> properties) {
         super(properties.apply(new Properties()));
     }

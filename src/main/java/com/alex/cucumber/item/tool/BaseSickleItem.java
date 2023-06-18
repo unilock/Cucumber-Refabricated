@@ -1,6 +1,5 @@
 package com.alex.cucumber.item.tool;
 
-import com.alex.cucumber.forge.common.extensions.ForgeItem;
 import com.alex.cucumber.helper.BlockHelper;
 import com.alex.cucumber.iface.Enableable;
 import com.alex.cucumber.lib.ModTags;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.material.Material;
 
 import java.util.function.Function;
 
-public class BaseSickleItem extends DiggerItem implements ForgeItem {
+public class BaseSickleItem extends DiggerItem {
     private final float attackDamage;
     private final float attackSpeed;
     private final int range;
