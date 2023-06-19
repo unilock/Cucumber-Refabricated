@@ -166,7 +166,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     @Override
     public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
-        return canPlaceItem(slot, stack);
+        return canPlaceItem(slot, stack) && (outputSlots == null || !ArrayUtils.contains(outputSlots, slot));
     }
 
     @Override
