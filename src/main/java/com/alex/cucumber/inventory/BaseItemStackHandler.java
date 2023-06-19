@@ -66,6 +66,11 @@ public class BaseItemStackHandler extends ItemStackHandler {
     }
 
     @Override
+    public int getMaxStackSize() {
+        return maxStackSize;
+    }
+
+    @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         return this.canInsert == null || this.canInsert.apply(slot, stack);
     }
