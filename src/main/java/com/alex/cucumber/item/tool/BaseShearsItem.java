@@ -1,19 +1,14 @@
 package com.alex.cucumber.item.tool;
 
-import com.alex.cucumber.forge.common.extensions.ForgeItem;
-import com.alex.cucumber.iface.Enableable;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
@@ -21,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Random;
 import java.util.function.Function;
 
-public class BaseShearsItem extends ShearsItem implements ForgeItem {
+public class BaseShearsItem extends ShearsItem {
     public BaseShearsItem(Function<Properties, Properties> properties) {
         super(properties.apply(new Properties()));
     }

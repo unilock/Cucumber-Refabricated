@@ -1,10 +1,8 @@
 package com.alex.cucumber.item.tool;
 
 import com.alex.cucumber.forge.common.extensions.ForgeItem;
-import com.alex.cucumber.iface.Enableable;
 import com.alex.cucumber.mixin.CropBlockInvoker;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -15,14 +13,17 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 
 import java.util.function.Function;
 
-public class BaseScytheItem extends SwordItem implements ForgeItem {
+public class BaseScytheItem extends SwordItem {
     private final float attackDamage;
     private final float attackSpeed;
     private final int range;
@@ -129,7 +130,7 @@ public class BaseScytheItem extends SwordItem implements ForgeItem {
             player.sweepAttack();
         }
 
-        return ForgeItem.super.onLeftClickEntity(stack, player, entity);
+        return super.onLeftClickEntity(stack, player, entity);
     }
 
     public float getAttackDamage() {

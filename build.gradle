@@ -20,6 +20,20 @@ repositories {
 		name = "Fuzs Mod Resources"
 		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
 	}
+
+	maven { url = "https://mvn.devos.one/snapshots/" }
+
+	maven { url 'https://jitpack.io' }
+
+	maven {
+		name = "Shedaniel"
+		url = "https://maven.shedaniel.me/"
+	}
+
+	maven {
+		name = "vram"
+		url = "https://maven.vram.io/"
+	}
 }
 
 dependencies {
@@ -41,6 +55,8 @@ dependencies {
 	implementation "com.electronwill.night-config:core:${project.nightconfig_version}"
 	implementation "com.electronwill.night-config:toml:${project.nightconfig_version}"
 	modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${project.forgeconfigapiport_version}"
+
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:Porting-Lib:${project.portinglib_version}"))
 }
 
 base {

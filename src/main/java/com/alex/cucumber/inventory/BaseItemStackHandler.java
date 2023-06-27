@@ -66,6 +66,11 @@ public class BaseItemStackHandler extends ItemStackHandler {
     }
 
     @Override
+    public int getMaxStackSize() {
+        return maxStackSize;
+    }
+
+    @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         return this.canInsert == null || this.canInsert.apply(slot, stack);
     }
@@ -161,7 +166,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     @Override
     public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
-        return canPlaceItem(slot, stack);
+        return canPlaceItem(slot, stack) && (outputSlots == null || !ArrayUtils.contains(outputSlots, slot));
     }
 
     @Override
