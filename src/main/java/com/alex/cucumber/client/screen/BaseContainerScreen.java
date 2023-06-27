@@ -3,6 +3,7 @@ package com.alex.cucumber.client.screen;
 import com.alex.cucumber.util.Localizable;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -31,21 +32,17 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
     }
 
     @Override
-    public void render(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+    public void render(GuiGraphics gfx, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(gfx);
+        super.render(gfx, mouseX, mouseY, partialTicks);
+        this.renderTooltip(gfx, mouseX, mouseY);
     }
 
-    protected void renderDefaultBg(PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, this.bgTexture);
-
+    protected void renderDefaultBg(GuiGraphics gfx, float partialTicks, int mouseX, int mouseY) {
         int x = this.leftPos;
         int y = this.topPos;
 
-        blit(matrix, x, y, 0, 0, this.imageWidth, this.imageHeight, this.bgImgWidth, this.bgImgHeight);
+        gfx.blit(this.bgTexture, x, y, 0, 0, this.imageWidth, this.imageHeight, this.bgImgWidth, this.bgImgHeight);
     }
 
     protected static String text(String key, Object... args) {

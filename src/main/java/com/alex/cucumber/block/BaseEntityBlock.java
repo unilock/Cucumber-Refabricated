@@ -8,21 +8,20 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 import java.util.function.Function;
 
 public abstract class BaseEntityBlock extends BaseBlock implements EntityBlock {
-    public BaseEntityBlock(Material material, Function<Properties, Properties> properties) {
-        super(material, properties);
+    public BaseEntityBlock(Function<Properties, Properties> properties) {
+        super(properties);
     }
 
-    public BaseEntityBlock(Material material, SoundType sound, float hardness, float resistance) {
-        super(material, sound, hardness, resistance);
+    public BaseEntityBlock(SoundType sound, float hardness, float resistance) {
+        super(sound, hardness, resistance);
     }
 
-    public BaseEntityBlock(Material material, SoundType sound, float hardness, float resistance, boolean tool) {
-        super(material, sound, hardness, resistance, tool);
+    public BaseEntityBlock(SoundType sound, float hardness, float resistance, boolean tool) {
+        super(sound, hardness, resistance, tool);
     }
 
     @Override

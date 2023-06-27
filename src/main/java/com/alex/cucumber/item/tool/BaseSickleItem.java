@@ -2,19 +2,15 @@ package com.alex.cucumber.item.tool;
 
 import com.alex.cucumber.forge.common.extensions.ForgeItem;
 import com.alex.cucumber.helper.BlockHelper;
-import com.alex.cucumber.iface.Enableable;
 import com.alex.cucumber.lib.ModTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 import java.util.function.Function;
 
@@ -36,17 +32,18 @@ public class BaseSickleItem extends DiggerItem implements ForgeItem {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return isValidMaterial(state) ? this.getTier().getSpeed() / 2 : super.getDestroySpeed(stack, state);
-    }
-
-    @Override
-    public boolean isSuitableFor(ItemStack stack, BlockState state) {
-        return isValidMaterial(state);
+        return state.is(ModTags.MINEABLE_WITH_SICKLE) ? this.getTier().getSpeed() / 2 : super.getDestroySpeed(stack, state);
     }
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        return this.harvest(stack, player.level, pos, player);
+        var level = player.level();
+        if (level.isClientSide())
+            return false;
+
+        this.harvestAOEBlocks(stack, level, pos, player);
+
+        return false;
     }
 
     public float getAttackDamage() {
@@ -57,16 +54,12 @@ public class BaseSickleItem extends DiggerItem implements ForgeItem {
         return this.attackSpeed;
     }
 
-    private boolean harvest(ItemStack stack, Level level, BlockPos pos, Player player) {
-        if (level.isClientSide())
-            return true;
-
+    private void harvestAOEBlocks(ItemStack stack, Level level, BlockPos pos, Player player) {
         var state = level.getBlockState(pos);
-        var hardness = state.getDestroySpeed(level, pos);
 
-        BlockHelper.harvestBlock(stack, level, (ServerPlayer) player, pos);
+        if (this.range > 0 && this.isCorrectToolForDrops(state)) {
+            var hardness = state.getDestroySpeed(level, pos);
 
-        if (this.range > 0 && isValidMaterial(state)) {
             BlockPos.betweenClosed(pos.offset(-this.range, -this.range, -this.range), pos.offset(this.range, this.range, this.range)).forEach(aoePos -> {
                 if (stack.isEmpty())
                     return;
@@ -74,7 +67,7 @@ public class BaseSickleItem extends DiggerItem implements ForgeItem {
                 if (aoePos != pos) {
                     var aoeState = level.getBlockState(aoePos);
 
-                    if (!isValidMaterial(aoeState))
+                    if (!this.isCorrectToolForDrops(aoeState))
                         return;
 
                     var aoeHardness = aoeState.getDestroySpeed(level, aoePos);
@@ -92,12 +85,5 @@ public class BaseSickleItem extends DiggerItem implements ForgeItem {
                 }
             });
         }
-
-        return true;
-    }
-
-    private static boolean isValidMaterial(BlockState state) {
-        var material = state.getMaterial();
-        return state.is(ModTags.MINEABLE_WITH_SICKLE) || material == Material.LEAVES || material == Material.PLANT || material == Material.REPLACEABLE_PLANT;
     }
 }
