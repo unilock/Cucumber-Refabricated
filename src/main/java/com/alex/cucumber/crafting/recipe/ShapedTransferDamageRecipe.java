@@ -55,6 +55,49 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
         return result;
     }
 
+    public static int firstNonSpace(String string) {
+        int i;
+        for (i = 0; i < string.length() && string.charAt(i) == ' '; ++i) {
+        }
+        return i;
+    }
+
+    public static int lastNonSpace(String string) {
+        int i;
+        for (i = string.length() - 1; i >= 0 && string.charAt(i) == ' '; --i) {
+        }
+        return i;
+    }
+
+    public static String[] shrink(String ... strings) {
+        int i = Integer.MAX_VALUE;
+        int j = 0;
+        int k = 0;
+        int l = 0;
+        for (int m = 0; m < strings.length; ++m) {
+            String string = strings[m];
+            i = Math.min(i, firstNonSpace(string));
+            int n = lastNonSpace(string);
+            j = Math.max(j, n);
+            if (n < 0) {
+                if (k == m) {
+                    ++k;
+                }
+                ++l;
+                continue;
+            }
+            l = 0;
+        }
+        if (strings.length == l) {
+            return new String[0];
+        }
+        String[] strings2 = new String[strings.length - l - k];
+        for (int o = 0; o < strings2.length; ++o) {
+            strings2[o] = strings[o + k].substring(i, j + 1);
+        }
+        return strings2;
+    }
+
     @Override
     public RecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.CRAFTING_SHAPED_TRANSFER_DAMAGE;
@@ -66,7 +109,7 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
             var group = GsonHelper.getAsString(json, "group", "");
             var category = CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(json, "category", null), CraftingBookCategory.MISC);
             var key = ShapedRecipe.keyFromJson(GsonHelper.getAsJsonObject(json, "key"));
-            var pattern = ShapedRecipe.shrink(ShapedRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern")));
+            var pattern = shrink(ShapedRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern")));
             var width = pattern[0].length();
             var height = pattern.length;
             var ingredients = ShapedRecipe.dissolvePattern(pattern, key, width, height);
