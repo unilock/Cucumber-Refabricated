@@ -23,6 +23,7 @@
       "com.alex.cucumber.Cucumber"
     ],
     "client": [
+      "com.alex.cucumber.CucumberClient"
     ]
   },
   "mixins": [
