@@ -1,6 +1,6 @@
 package com.alex.cucumber.inventory;
 
-import com.alex.cucumber.forge.common.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.ArrayUtils;

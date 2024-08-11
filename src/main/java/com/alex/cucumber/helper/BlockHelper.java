@@ -1,7 +1,7 @@
 package com.alex.cucumber.helper;
 
-import com.alex.cucumber.forge.common.ForgeHooks;
-import com.alex.cucumber.forge.common.extensions.ForgeBlock;
+import io.github.fabricators_of_create.porting_lib.block.HarvestableBlock;
+import io.github.fabricators_of_create.porting_lib.util.PortingHooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -52,7 +52,7 @@ public class BlockHelper {
 
         var type = player.gameMode.getGameModeForPlayer();
 
-        int exp = ForgeHooks.onBlockBreakEvent(level, type, player, pos);
+        int exp = PortingHooks.onBlockBreakEvent(level, type, player, pos);
         if (exp == -1) {
             return false;
         }
@@ -72,7 +72,7 @@ public class BlockHelper {
             return true;
 
         var block = state.getBlock();
-        if (destroyed && /*state.canHarvestBlock(world, pos, player)*/ForgeBlock.canHarvestBlock(state, level, pos, player)) {
+        if (destroyed && (!(block instanceof HarvestableBlock harvestableBlock) || harvestableBlock.canHarvestBlock(state, level, pos, player))) {
             block.playerDestroy(level, player, pos, state, level.getBlockEntity(pos), stack);
             stack.mineBlock(level, state, pos, player);
         }
@@ -94,8 +94,8 @@ public class BlockHelper {
     }
 
     public static boolean destroyBlock(BlockState state, Level level, Player player, BlockPos pos) {
-        var canHarvest = !player.isCreative() && /*state.canHarvestBlock(world, pos, player)*/ForgeBlock.canHarvestBlock(state, level, pos, player);
-        var destroyed = ForgeBlock.onDestroyedByPlayer(state, level, pos, player, canHarvest, level.getFluidState(pos));
+        var canHarvest = !player.isCreative() && (!(state.getBlock() instanceof HarvestableBlock harvestableBlock) || harvestableBlock.canHarvestBlock(state, level, pos, player));
+        var destroyed = state.onDestroyedByPlayer(level, pos, player, canHarvest, level.getFluidState(pos));
 
         if (destroyed) {
             state.getBlock().destroy(level, pos, state);

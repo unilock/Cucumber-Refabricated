@@ -1,6 +1,5 @@
 package com.alex.cucumber.item.tool;
 
-import com.alex.cucumber.forge.common.extensions.ForgeItem;
 import com.alex.cucumber.mixin.CropBlockInvoker;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;

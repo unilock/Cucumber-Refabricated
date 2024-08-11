@@ -97,11 +97,11 @@ public abstract class ItemStackHandler implements WorldlyContainer {
         else
         {
             if (!this.simulate) {
-                this.stacks.set(slot, ItemHandlerHelper.copyStackWithSize(existing, existing.getCount() - toExtract));
+                this.stacks.set(slot, existing.copyWithCount(existing.getCount() - toExtract));
                 setChanged();
             }
             this.simulate = false;
-            return ItemHandlerHelper.copyStackWithSize(existing, toExtract);
+            return existing.copyWithCount(toExtract);
         }
     }
 
@@ -147,7 +147,7 @@ public abstract class ItemStackHandler implements WorldlyContainer {
         if (!this.simulate) {
             if (existing.isEmpty())
             {
-                this.setItem(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
+                this.setItem(slot, reachedLimit ? stack.copyWithCount(limit) : stack);
             }
             else
             {
@@ -157,7 +157,7 @@ public abstract class ItemStackHandler implements WorldlyContainer {
         }
 
         this.simulate = false;
-        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount()- limit) : ItemStack.EMPTY;
+        return reachedLimit ? stack.copyWithCount(stack.getCount() - limit) : ItemStack.EMPTY;
     }
 
     public int getSlotLimit(int slot)

@@ -1,9 +1,5 @@
 package com.alex.cucumber.item.tool;
 
-import com.alex.cucumber.iface.Enableable;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 

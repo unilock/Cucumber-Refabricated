@@ -1,29 +1,35 @@
 plugins {
-	id 'fabric-loom' version '1.2-SNAPSHOT'
+	id 'fabric-loom' version '1.7-SNAPSHOT'
 	id 'maven-publish'
 }
 
-version = project.mod_version
+base {
+	archivesName = project.archives_base_name
+}
+
+version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
 
 loom {
 	accessWidenerPath = file("src/main/resources/cucumber.accesswidener")
+
+	mods {
+		"cucumber" {
+			sourceSet sourceSets.main
+		}
+	}
 }
 
 repositories {
 	maven {
-		url = 'https://maven.blamejared.com'
-		name = 'BlameJared Maven'
+		name = "BlameJared"
+		url = "https://maven.blamejared.com/"
 	}
 
 	maven {
-		name = "Fuzs Mod Resources"
-		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+		name = "JamiesWhiteShirt"
+		url = "https://maven.jamieswhiteshirt.com/libs-release/"
 	}
-
-	maven { url = "https://mvn.devos.one/snapshots/" }
-
-	maven { url 'https://jitpack.io' }
 
 	maven {
 		name = "Shedaniel"
@@ -34,6 +40,21 @@ repositories {
 		name = "vram"
 		url = "https://maven.vram.io/"
 	}
+
+	maven {
+		name = "DevOS"
+		url = "https://mvn.devos.one/releases/"
+	}
+
+	maven {
+		name = "Fuzs Mod Resources"
+		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+	}
+
+	maven {
+		name = "JitPack"
+		url = "https://jitpack.io/"
+	}
 }
 
 dependencies {
@@ -42,25 +63,20 @@ dependencies {
 	mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	//Almost Unified
-	modApi("com.almostreliable.mods:almostunified-fabric:${project.almostunified_version}")
+	modApi "com.almostreliable.mods:almostunified-fabric:${project.almostunified_version}"
 
-	include modApi("teamreborn:energy:${project.energy_version}") {
-		exclude(group: "net.fabricmc.fabric-api")
+	modApi include("teamreborn:energy:${project.energy_version}") {
+		exclude group: "net.fabricmc.fabric-api"
 	}
 
+	modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${project.forgeconfigapiport_version}"
 	implementation "com.electronwill.night-config:core:${project.nightconfig_version}"
 	implementation "com.electronwill.night-config:toml:${project.nightconfig_version}"
-	modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${project.forgeconfigapiport_version}"
 
-	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:Porting-Lib:${project.portinglib_version}"))
-}
-
-base {
-	archivesName = project.archives_base_name+"-"+project.minecraft_version
+	modImplementation include("io.github.fabricators_of_create.Porting-Lib:base:${project.portinglib_version}")
 }
 
 processResources {
@@ -72,14 +88,11 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
+	it.options.encoding = "UTF-8"
 	it.options.release = 17
 }
 
 java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
 	sourceCompatibility = JavaVersion.VERSION_17
@@ -88,11 +101,11 @@ java {
 
 jar {
 	from("LICENSE") {
-		rename { "${it}_${base.archivesName.get()}"}
+		rename { "${it}_${base.archivesName.get()}" }
 	}
 }
 
-// configure the maven publication
+// Configure the maven publication
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
@@ -106,11 +119,5 @@ publishing {
 		// Notice: This block does NOT have the same function as the block in the top level.
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
-	}
-}
-
-configurations.all {
-	resolutionStrategy {
-		force("net.fabricmc:fabric-loader:$loader_version")
 	}
 }

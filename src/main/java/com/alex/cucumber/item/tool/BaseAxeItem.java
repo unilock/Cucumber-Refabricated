@@ -1,8 +1,7 @@
 package com.alex.cucumber.item.tool;
 
-import com.alex.cucumber.iface.Enableable;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Tier;
 
 import java.util.function.Function;
 

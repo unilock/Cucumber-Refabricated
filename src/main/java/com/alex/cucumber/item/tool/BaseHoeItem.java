@@ -1,10 +1,6 @@
 package com.alex.cucumber.item.tool;
 
-import com.alex.cucumber.iface.Enableable;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.HoeItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 
 import java.util.function.Function;
